@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27022:27017"  # Expose MongoDB on a different port
+    environment:
+      MONGO_INITDB_DATABASE: tesadb
+
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "3000:3000"  # Expose backend API
+      - "8080:8080"  # Expose WebSocket Server
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/tesadb"
+
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt_broker
+    ports:
+      - "1883:1883"
+      - "9001:9001"  # WebSocket, if needed
+    volumes:
+      - ./backend/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./backend/mosquitto/config/password.txt:/mosquitto/config/password.txt
+      - ./backend/mosquitto/data:/mosquitto/data
+      - ./backend/mosquitto/log:/mosquitto/log
+
+  publisher:
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile
+    command: ["pub.py"]
+    depends_on:
+      - mqtt-broker
+
+  subscriber:
+    build:
+      context: ./scripts
+      dockerfile: Dockerfile
+    command: ["sub.py"]
+    depends_on:
+      - mqtt-broker
+      - mongodb
