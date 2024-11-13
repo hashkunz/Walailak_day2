@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realtime Machine Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        .current-values {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .value-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f1f1f1;
+            text-align: center;
+            width: 150px;
+        }
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        .chart-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Realtime Machine Data</h1>
+    <form action="" onsubmit="connect(event)">
+        <label>API Key:</label>
+        <input type="text" id="api_key" autocomplete="off"/>
+        <button>Connect</button>
+    </form>
+
+    <!-- Current Values Section -->
+    <div class="current-values">
+        <div class="value-box" id="currentPower">Power: - W</div>
+        <div class="value-box" id="currentVoltage">Voltage: - V</div>
+        <div class="value-box" id="currentPressure">Pressure: - Pa</div>
+        <div class="value-box" id="currentForce">Force: - N</div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-container">
+        <div class="chart-box" id="powerChart"></div>
+        <div class="chart-box" id="voltageChart"></div>
+        <div class="chart-box" id="pressureChart"></div>
+        <div class="chart-box" id="forceChart"></div>
+    </div>
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>
